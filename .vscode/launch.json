@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Portainer Manager",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/portainer-stack-manager/manager.py",
+            "cwd": "${workspaceFolder}/portainer-stack-manager",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            //"args": ["--start", "--stack-name", "beat-together"]
+            "args": ["--restart", "--all"]
+        }
+    ]
+}
