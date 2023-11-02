@@ -21,5 +21,6 @@ py manager.py --start   --all
 
 If the restart option is picked, only stacks that are running will be restarted.
 
-**BEWARE**: Using start will start all stacks, even those that are not supposed to run because they have been disabled before. So use that with care.
+**BEWARE**: Using start combined with the `--all` option will always start all inactive stacks.
+Even those that are not supposed to run because they have been explicitly stopped before. So use that with care.
 
