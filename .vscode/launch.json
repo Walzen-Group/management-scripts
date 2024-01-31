@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Portainer Manager",
             "type": "python",
@@ -14,6 +15,16 @@
             "justMyCode": true,
             //"args": ["--start", "--stack-name", "beat-together"]
             "args": ["--restart", "--all"]
+        },
+        {
+            "name": "Python: Maid",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/transcode-cleanup/maid.py",
+            "cwd": "${workspaceFolder}/transcode-cleanup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            //"args": ["--start", "--stack-name", "beat-together"]
         }
     ]
 }
