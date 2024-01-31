@@ -134,7 +134,6 @@ if __name__ == "__main__":
     logger.add(sys.stderr, level=log_level, format="<bold>{time:YYYY-MM-DD HH:mm:ss.SS}</> | <bold><level>{level: <6}</level></bold> | {message}")
     logger.info("UwU I am the jellyfin cleanup maid *~*")
     logger.info(ascii_art())
-    size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
     ts_ids_in_use = find_ts_ids_in_use()
     logger.info(f"potentially active ts ids in use: {ts_ids_in_use}")
     ids_to_delete, size_to_delete = find_ts_ids_to_delete(ts_ids_in_use)
@@ -143,12 +142,14 @@ if __name__ == "__main__":
         logger.info("ts files to delete:")
         for file in find_ts_ids_to_delete(ts_ids_in_use)[0]:
             logger.debug(f"cleanable ts file: {file}")
-    logger.info(f"ramdisk size before cleanup: {size}")
     logger.info(f"cleanable ts file count: {len(ids_to_delete)}")
     logger.info(f"cleanable ts file size: {round(size_to_delete / 1024 / 1024)}M")
+    size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
+    logger.info(f"ramdisk size before cleanup: {size}")
+
     if len(ids_to_delete) > 0 and not log_level == "DEBUG":
+
         for file in ids_to_delete:
             file.unlink()
-
-    size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
-    logger.info(f"ramdisk size after cleanup: {size}")
+        size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
+        logger.info(f"ramdisk size after cleanup: {size}")
