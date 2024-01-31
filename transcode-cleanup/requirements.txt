@@ -1,0 +1,4 @@
+autopep8==2.0.4
+loguru==0.7.2
+pip-chill==1.0.3
+requests==2.31.0

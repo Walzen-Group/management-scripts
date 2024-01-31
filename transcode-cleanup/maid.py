@@ -10,6 +10,35 @@ with open("config.json") as json_file:
     config = json.load(json_file)
 
 
+def ascii_art():
+    return """
+      .----.
+     /      \\
+    |  0  0  |
+    |   __   | <--- Anime Character
+     \      /
+      '----'
+       /||\\
+      //||\\
+     // || \\
+    //  ||  \\
+   //   ||   \\
+  //    ||    \\
+ //     ||     \\
+        ||
+        ||
+        ||
+        ||
+    .-\"\"\"\"\"\"-.
+   /          \\
+  |            |
+  |(- -) (- -) | <--- Hard Disk
+  |   o     o  |
+  |    \___/   |
+   \          /
+    '-......-'
+"""
+
 def get_all_sessions():
     auth = f"MediaBrowser Client='Jelsi', Device='Firefox', DeviceId='TW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0OyBydjo5NC4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94Lzk0LjB8MTYzODA1MzA2OTY4Mw11', Version='10.7.6', Token={config['api_token']}"
     headers = {"Authorization": auth}
@@ -104,31 +133,10 @@ if __name__ == "__main__":
     logger.remove()
     logger.add(sys.stderr, level=log_level, format="<bold>{time:YYYY-MM-DD HH:mm:ss.SS}</> | <bold><level>{level: <6}</level></bold> | {message}")
     logger.info("UwU I am the jellyfin cleanup maid *~*")
+    logger.info(ascii_art())
     size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
     ts_ids_in_use = find_ts_ids_in_use()
     logger.info(f"potentially active ts ids in use: {ts_ids_in_use}")
-
-    """
-    .____________________________________________________.
-    | __________________________________________________ |
-    ||                                                  ||
-    ||                                                  ||
-    ||        .---.                                     ||
-    ||       /     \                                    ||
-    ||       |(- -)|  <--- Hard Disk                    ||
-    ||       |  o  |                                    ||
-    ||       \     /                                    ||
-    ||        '---'                                     ||
-    ||                                                  ||
-    ||                                                  ||
-    ||      /----\                                      ||
-    ||     |      | <--- Cleaning Brush                 ||
-    ||     |      |                                     ||
-    ||      \----/                                      ||
-    ||__________________________________________________||
-    |____________________________________________________|
-"""
-
     ids_to_delete, size_to_delete = find_ts_ids_to_delete(ts_ids_in_use)
 
     if log_level == "DEBUG":
