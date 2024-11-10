@@ -41,6 +41,7 @@ def ascii_art():
     '-......-'
 """
 
+
 def get_all_sessions():
     auth = f"MediaBrowser Client='Jelsi', Device='Firefox', DeviceId='TW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0OyBydjo5NC4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94Lzk0LjB8MTYzODA1MzA2OTY4Mw11', Version='10.7.6', Token={config.get('api_token')}"
     headers = {"Authorization": auth}
@@ -72,7 +73,6 @@ def calculate_filesize_of_dir(path):
         ['du', '-sh', path], stdout=subprocess.PIPE, text=True)
     result = result.stdout.split()[0]
     return result
-
 
 
 def find_logs_with_id(media_id):
@@ -113,8 +113,10 @@ def find_ts_ids_in_use():
 
 
 def find_ts_ids_to_delete(ts_ids_in_use):
-    ts_files = list(Path(config.get("jf_transcode_ramdisk")).rglob("*.ts"))
-    ts_files_to_delete = [file for file in ts_files if not any(file.name.startswith(ts_id) for ts_id in ts_ids_in_use)]
+    ts_files = list(Path(config["jf_transcode_ramdisk"]).rglob("*.ts")) + \
+        list(Path(config["jf_transcode_ramdisk"]).rglob("*.mp4"))
+    ts_files_to_delete = [file for file in ts_files if not any(
+        file.name.startswith(ts_id) for ts_id in ts_ids_in_use)]
     size = 0
     for file in ts_files_to_delete:
         size += file.stat().st_size
@@ -147,7 +149,8 @@ if __name__ == "__main__":
         log_level = "DEBUG"
 
     logger.remove()
-    logger.add(sys.stderr, level=log_level, format="<bold>{time:YYYY-MM-DD HH:mm:ss.SS}</> | <bold><level>{level: <6}</level></bold> | {message}")
+    logger.add(sys.stderr, level=log_level,
+               format="<bold>{time:YYYY-MM-DD HH:mm:ss.SS}</> | <bold><level>{level: <6}</level></bold> | {message}")
     logger.info("UwU I am the jellyfin cleanup maid *~*")
     logger.info(ascii_art())
     ts_ids_in_use = find_ts_ids_in_use()
@@ -159,9 +162,10 @@ if __name__ == "__main__":
         for file in find_ts_ids_to_delete(ts_ids_in_use)[0]:
             logger.debug(f"cleanable ts file: {file}")
     logger.info(f"cleanable ts file count: {len(ids_to_delete)}")
-    logger.info(f"cleanable ts file size: {round(size_to_delete / 1024 / 1024)}M")
-    size = calculate_filesize_of_dir(config.get("jf_transcode_ramdisk"))
-    logger.info(f"current ramdisk size: {size}")
+    logger.info(
+        f"cleanable ts file size: {round(size_to_delete / 1024 / 1024)}M")
+    size = calculate_filesize_of_dir(config["jf_transcode_ramdisk"])
+    logger.info(f"ramdisk size before cleanup: {size}")
 
     if len(ids_to_delete) > 0 and not log_level == "DEBUG":
         write_to_influx(size_to_delete, len(ids_to_delete))

@@ -19,7 +19,7 @@ def read_secrets(file_path="secrets.json"):
 access_token, portainer_api_url = read_secrets()
 
 
-def get_endpoint_id(endpoint_name='Unraid'):
+def get_endpoint_id(endpoint_name='Quasar'):
     headers = {
         "X-API-Key": f"{access_token}",
     }
@@ -46,7 +46,7 @@ def get_endpoint_id(endpoint_name='Unraid'):
     return endpoint_id
 
 
-def get_running_stacks(endpoint_id='Unraid'):
+def get_running_stacks(endpoint_id='Quasar'):
     headers = {
         "X-API-Key": f"{access_token}",
     }
@@ -79,6 +79,8 @@ def command_single(stack_name: str, start=True):
         "endpointId": endpoint_id,
     }
 
+    stacks = requests.get(f"{portainer_api_url}/stacks", headers=headers, params=query_params).json()
+
     found_stack = None
     for stack in stacks:
         if stack["Name"] == stack_name:
@@ -107,19 +109,19 @@ def command_all(start=True, stack_id_list: List[dict] = None):
     }
 
     command = "start" if start else "stop"
+
+    endpoint_id = get_endpoint_id()
+    query_params = {
+        "endpointId": endpoint_id,
+    }
     # Get a list of all stacks
-    stacks_response = requests.get(f"{portainer_api_url}/stacks", headers=headers)
+    stacks_response = requests.get(f"{portainer_api_url}/stacks", headers=headers, params=query_params)
     stacks = stacks_response.json()
 
     if "message" in stacks:
         print(f"failed to get stack list: {stacks['message']}")
         return
 
-    endpoint_id = get_endpoint_id()
-
-    query_params = {
-        "endpointId": endpoint_id,
-    }
 
     if stack_id_list:
         for stack in stack_id_list:
