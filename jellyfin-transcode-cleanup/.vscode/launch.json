@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Portainer Manager",
+            "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/portainer-stack-manager/manager.py",
-            "cwd": "${workspaceFolder}/portainer-stack-manager",
+            "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true,
-            //"args": ["--start", "--stack-name", "librespeed"]
-            //"args": ["--restart", "--all"]
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true
         }
     ]
 }
